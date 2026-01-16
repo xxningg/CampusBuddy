@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYP Campus Buddy - Your AI Campus Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #0056A3 0%, #003366 100%);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #FFD700;
+            color: #003366;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: #FFED4E;
+        }
+
+        /* Main Content */
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #0056A3;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background: #FFD700;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #0056A3;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #003366;
+        }
+
+        /* Chatbot Widget - SIMPLE & WORKING */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 10000;
+        }
+
+        .chatbot-toggle {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #0056A3 0%, #003366 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 86, 163, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-container {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+
+        .chatbot-container.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #0056A3 0%, #003366 100%);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        .chatbot-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #003366;
+            color: white;
+            padding: 50px 0 25px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .copyright {
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .chatbot-container {
+                width: 340px;
+                height: 500px;
+                right: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chatbot-container {
+                width: 300px;
+                height: 500px;
+                right: -40px;
+            }
+            
+            .chatbot-widget {
+                bottom: 20px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1>NYP Campus Buddy</h1>
+                <p class="tagline">Your AI-powered guide to Nanyang Polytechnic</p>
+                <a href="#try-chatbot" class="cta-button" id="tryChatbotBtn">Try Campus Buddy Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Introduction Section -->
+    <section id="introduction">
+        <div class="container">
+            <h2 class="section-title">Why Campus Buddy?</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>24/7 Instant Answers</h3>
+                    <p>Get immediate responses to your questions about NYP anytime, anywhere.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-signs"></i>
+                    </div>
+                    <h3>Campus Navigation</h3>
+                    <p>Find your way around NYP campus easily with detailed directions.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Course Information</h3>
+                    <p>Explore all diploma programs and admission requirements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" style="background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="step-number" style="background: #0056A3; color: white; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; display: inline-block; margin-bottom: 15px;">1</div>
+                    <h3>Ask Your Question</h3>
+                    <p>Type any question about NYP - admissions, courses, facilities, or events.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="step-number" style="background: #0056A3; color: white; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; display: inline-block; margin-bottom: 15px;">2</div>
+                    <h3>AI-Powered Response</h3>
+                    <p>Campus Buddy uses AI to provide accurate, helpful information.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="step-number" style="background: #0056A3; color: white; width: 50px; height: 50px; line-height: 50px; border-radius: 50%; display: inline-block; margin-bottom: 15px;">3</div>
+                    <h3>Get Instant Help</h3>
+                    <p>Receive clear answers with links to official NYP resources.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-robot"></i>
+        </button>
+        
+        <div class="chatbot-container" id="chatbotContainer">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-comments"></i> NYP Campus Buddy</h3>
+                <p>Ask me anything about NYP!</p>
+            </div>
+            <!-- SIMPLE IFRAME - THIS WILL WORK -->
+            <iframe 
+                src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2026/01/16/11/20260116114307-9WMREX5I.json" 
+                class="chatbot-frame"
+                id="chatbotFrame"
+                allow="microphone">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <i class="fas fa-graduation-cap"></i> NYP Campus Buddy
+            </div>
+            <p>An AI Project for Nanyang Polytechnic</p>
+            <p>Designed and Developed as part of AI Solutions Module</p>
+            
+            <div class="copyright">
+                &copy; 2025 NYP Campus Buddy. All rights reserved.<br>
+                This project is for educational purposes.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // SIMPLE TOGGLE - GUARANTEED TO WORK
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const chatbotFrame = document.getElementById('chatbotFrame');
+
+        // Toggle chatbot visibility
+        chatbotToggle.addEventListener('click', function() {
+            const isOpening = !chatbotContainer.classList.contains('active');
+            const toggleIcon = this.querySelector('i');
+            
+            // Toggle container
+            chatbotContainer.classList.toggle('active');
+            
+            // Change icon
+            if (chatbotContainer.classList.contains('active')) {
+                toggleIcon.className = 'fas fa-times';
+                
+                // Ensure iframe reloads when opening (fix for blank screen)
+                setTimeout(() => {
+                    chatbotFrame.src = chatbotFrame.src;
+                }, 100);
+            } else {
+                toggleIcon.className = 'fas fa-robot';
+            }
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!chatbotContainer.contains(event.target) && 
+                !chatbotToggle.contains(event.target) &&
+                chatbotContainer.classList.contains('active')) {
+                
+                chatbotContainer.classList.remove('active');
+                chatbotToggle.querySelector('i').className = 'fas fa-robot';
+            }
+        });
+
+        // Try Now button
+        document.getElementById('tryChatbotBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Scroll to top smoothly
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Open chatbot after a delay
+            setTimeout(() => {
+                if (!chatbotContainer.classList.contains('active')) {
+                    chatbotToggle.click();
+                }
+            }, 600);
+        });
+
+        // Simple typing effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const tagline = document.querySelector('.tagline');
+            const text = "Your AI-powered guide to Nanyang Polytechnic";
+            tagline.textContent = '';
+            
+            let i = 0;
+            function typeEffect() {
+                if (i < text.length) {
+                    tagline.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeEffect, 50);
+                }
+            }
+            
+            setTimeout(typeEffect, 500);
+        });
+
+        // Auto-open for first-time visitors
+        if (!localStorage.getItem('chatbotShown')) {
+            setTimeout(() => {
+                chatbotToggle.click();
+                localStorage.setItem('chatbotShown', 'true');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
